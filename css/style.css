@@ -1,0 +1,31 @@
+/* style.css */
+html, body{
+    height: 100%;
+}
+
+.navbar-brand{
+    font-family: 'Julius Sans One', sans-serif;
+    font-size: 1.8rem;
+    font-weight: normal;/*removes bold*/
+    letter-spacing: 3.5px;/*spaces out leters nicely*/
+}
+
+h2{
+    font-family: 'Julius Sans One', sans-serif;
+    font-size: 1.9rem;
+    font-weight: normal;/*removes bold*/
+    color:black;
+    letter-spacing: 3.5px;/*spaces out leters nicely*/
+    text-align: center;
+}
+
+.card{
+    width: 30%;
+    margin: 0 auto;
+    margin-top: 3rem;
+    box-shadow: 6px 6px 5px darkgrey;
+}
+
+#forgot, #reg, #log{
+    color: #12aa95;
+}
