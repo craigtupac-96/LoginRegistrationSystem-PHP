@@ -23,7 +23,6 @@
     <?php if(isset($_SESSION['username'])): ?>
         <p>Hey there <strong><?php echo $_SESSION['username']; ?></strong>, what's up?</p>
         <a class="btn btn-info" href="changePasswordForm.php" role="button">Change Password</a>
-        <!-- <a class="btn btn-info" href="loginForm.php?logout='1'" role="button">Logout</a> -->
         <a class="btn btn-info" href="logout.php" role="button">Logout</a>
     <?php endif ?>
 

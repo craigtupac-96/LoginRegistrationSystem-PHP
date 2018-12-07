@@ -1,19 +1,56 @@
 <?php
     session_start();
     include('connect.php');
+    include('functions.php');
     unset($_SESSION['badUser']);
 
     if(isset($_POST['login'])){
         $username = $_POST['username'];
         $inputPassword = $_POST['password'];
-        $username = sanitizeInputLog($username);
+        $username = sanitizeInput($username);
+        $userAgent = $_SERVER["HTTP_USER_AGENT"];
+        $con = mysqli_connect('localhost', 'root', '', 'secappdb');
+
+        // start attempts
+        $sql = "SELECT * FROM lockout WHERE userAgent = '$userAgent' ORDER BY attemptTime DESC";
+        $query = mysqli_query($con, $sql);
+        $row = mysqli_fetch_array($query);
+
+        $result = mysqli_num_rows($query);
+
+        if($result == 3){
+            $timeZone = (new DateTimeZone('Europe/Dublin'));
+            $lockoutTime = 120; // this is 5 minutes in seconds
+
+            $currentTime = new DateTime('now', $timeZone);
+            $currentTimeStamp = date_timestamp_get($currentTime);
+
+            $lastTimeDB = new DateTime($row['attemptTime'], $timeZone);
+            $lastDBTimeStamp = date_timestamp_get($lastTimeDB);
+
+            // calculate the difference
+            $timeDiff = abs($currentTimeStamp - $lastDBTimeStamp);
+
+            if($timeDiff < $lockoutTime){
+                // output error - header
+                $timeLeft = $lockoutTime - $timeDiff;
+                $_SESSION['timeLeft'] = $timeLeft;
+                header('location: loginForm.php?log=lockedOut');
+                exit;
+            }
+            else{
+                clearAttempts($userAgent);
+            }
+        }
 
         // error checking
         if(empty($username)){
+            insertFailedAttempt($userAgent);
             header('location: loginForm.php?log=emptyUser');
             exit();
         }
         if(empty($inputPassword)){
+            insertFailedAttempt($userAgent);
             header('location: loginForm.php?log=emptyPass');
             exit();
         }
@@ -32,16 +69,21 @@
                 $hashedInput = hash('sha256', $saltInput);
                 // compare passwords
                 if(check_passwords($hashedInput, $hashedPassword)){
+                    session_destroy();  // destroying session to create authenticated session
+                    session_start();
                     $_SESSION['username'] = $username;
-                    $_SESSION['success'] = "Welcome!"; // add success seciton
+                    $_SESSION['success'] = "Welcome!";
+                    clearAttempts($userAgent);
                 }
                 else{
+                    insertFailedAttempt($userAgent);
                     $_SESSION['badUser'] = $username;
                     header('location: loginForm.php?log=wrongUserPass');
                     exit();
                 }
             }
             else{
+                insertFailedAttempt($userAgent);
                 $_SESSION['badUser'] = $username;
                 header('location: loginForm.php?log=wrongUserPass');
                 exit();
@@ -56,35 +98,7 @@
     }
 
 
-    function check_passwords($input, $stored){
-        for($i = 0; $i < strlen($input); $i++){
-            if($input[$i] != $stored[$i]){
-                return false;
-            }
-        }
-        return true;
-    }
 
-    function sanitizeInputLog($input){
-        $specCharsMap = array('&' => '&amp',
-            '<' => '&lt',
-            '>' => '&gt',
-            '"' => '&quot',
-            "'" => '&#x27',
-            '/' => '&#x2F');  // for readability
-        $newInput = "";
-
-        for($i = 0; $i < strlen($input); $i++){
-            if(array_key_exists($input[$i], $specCharsMap)){
-                $newInput .= $specCharsMap[$input[$i]];
-            }
-            else{
-                $newInput .= $input[$i];
-            }
-        }
-
-        return $newInput;
-    }
 
 
 

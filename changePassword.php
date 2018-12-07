@@ -1,6 +1,7 @@
 <?php
     session_start();
     include('connect.php');
+    include('functions.php');
     $errors = array();
 
     if(isset($_POST['change'])) {
@@ -77,42 +78,3 @@
         }
     }
 
-    function check_passwords($input, $stored){
-        for($i = 0; $i < strlen($input); $i++){
-            if($input[$i] != $stored[$i]){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    function generateRandomSalt() {
-        $randomSalt = "";
-        $goodChars = array_merge(range('A','Z'), range('a','z'), range('0','9'));
-        $max = count($goodChars) - 1;
-        for($i = 0; $i <=59; $i++){
-            $random = mt_rand(0, $max);
-            $randomSalt .= $goodChars[$random];
-        }
-
-        if(isUnique($randomSalt)){
-            return $randomSalt;
-        }
-        else {
-            generateRandomSalt();
-        }
-    }
-
-    function isUnique($salt){
-        global $con;
-        $sql = "SELECT * FROM users WHERE salt='$salt' LIMIT 1";
-        $query = mysqli_query($con, $sql);
-        $result = mysqli_fetch_assoc($query);
-
-        if (!$result) {
-            return true;
-        }
-        else{
-            return false;
-        }
-    }

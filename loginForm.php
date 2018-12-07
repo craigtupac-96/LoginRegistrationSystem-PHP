@@ -28,6 +28,13 @@
                         <?php
                         $user = $_SESSION['badUser'];
                         echo "The username/password combination cannot be authenticated for <strong>$user</strong> at the moment"; ?>
+                    </div>  <?php }
+
+                else if(strpos($fullUrl, "log=lockedOut") == true){?>
+                    <div class="alert alert-danger">
+                        <?php
+                        $timeLeft = $_SESSION['timeLeft'];
+                        echo "Too many failed attempts. You have been locked out. Try again in <strong>$timeLeft</strong> seconds"; ?>
                     </div>  <?php } ?>
 
 

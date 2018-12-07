@@ -1,13 +1,14 @@
 <?php
     session_start();
     include('connect.php');
+    include('functions.php');
 
     if(isset($_POST['register'])){
         $username = $_POST['username'];
         $password1 = $_POST['password1'];
         $password2 = $_POST['password2'];
 
-        $username = sanitizeInputReg($username);
+        $username = sanitizeInput($username);
 
         // error checking
         if(empty($username)){
@@ -50,7 +51,6 @@
                 exit();
             }
         }
-
             // get unique salt
             $salt = generateRandomSalt();
             $salted = $salt . $password1;
@@ -59,58 +59,10 @@
 
             $sql = "INSERT INTO `users` (`id`, `username`, `password`, `salt`) VALUES (NULL, '".$username."', '".$hash."', '".$salt."')";
             mysqli_query($con, $sql);
+            session_destroy(); // fix this -> kill session and jump to login
+            session_start();
             $_SESSION['username'] = $username;
             $_SESSION['success'] = "Welcome! ";
             header('location: success.php');
     }
 
-    function generateRandomSalt() {
-        $randomSalt = "";
-        $goodChars = array_merge(range('A','Z'), range('a','z'), range('0','9'));
-        $max = count($goodChars) - 1;
-        for($i = 0; $i <=59; $i++){
-            $random = mt_rand(0, $max);
-            $randomSalt .= $goodChars[$random];
-        }
-
-        if(isUnique($randomSalt)){
-            return $randomSalt;
-        }
-        else {
-            generateRandomSalt();
-        }
-    }
-
-    function isUnique($salt){
-        global $con;
-        $sql = "SELECT * FROM users WHERE salt='$salt' LIMIT 1";
-        $query = mysqli_query($con, $sql);
-        $result = mysqli_fetch_assoc($query);
-
-        if (!$result) {
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    function sanitizeInputReg($input){
-        $specCharsMap = array('&' => '&amp',
-            '<' => '&lt',
-            '>' => '&gt',
-            '"' => '&quot',
-            "'" => '&#x27',
-            '/' => '&#x2F');  // for readability
-        $newInput = "";
-
-        for($i = 0; $i < strlen($input); $i++){
-            if(array_key_exists($input[$i], $specCharsMap)){
-                $newInput .= $specCharsMap[$input[$i]];
-            }
-            else{
-                $newInput .= $input[$i];
-            }
-        }
-        return $newInput;
-    }
