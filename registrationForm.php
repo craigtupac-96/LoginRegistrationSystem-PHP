@@ -10,50 +10,48 @@
             <form method="post" action="register.php">
                 <!-- Display errors here -->
                 <?php
-                $fullUrl = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                    $fullUrl = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
-                if(strpos($fullUrl, "reg=emptyUser") == true){?>
-                    <div class="alert alert-danger">
-                        <?php echo "Username is required"; ?>
-                    </div>  <?php }
+                    if(strpos($fullUrl, "reg=emptyUser") == true){?>
+                        <div class="alert alert-danger">
+                            <?php echo "Username is required"; ?>
+                        </div>  <?php }
 
-                if(strpos($fullUrl, "reg=emptyPass") == true){?>
-                    <div class="alert alert-danger">
-                        <?php echo "Password is required"; ?>
-                    </div>  <?php }
+                    if(strpos($fullUrl, "reg=emptyPass") == true){?>
+                        <div class="alert alert-danger">
+                            <?php echo "Password is required"; ?>
+                        </div>  <?php }
 
-                if(strpos($fullUrl, "reg=emptyRePass") == true){?>
-                    <div class="alert alert-danger">
-                        <?php echo "Re-enter Password is required"; ?>
-                    </div>  <?php }
+                    if(strpos($fullUrl, "reg=emptyRePass") == true){?>
+                        <div class="alert alert-danger">
+                            <?php echo "Re-enter Password is required"; ?>
+                        </div>  <?php }
 
-                if(strpos($fullUrl, "reg=noPassMatch") == true){?>
-                    <div class="alert alert-danger">
-                        <?php echo "The two passwords do not match"; ?>
-                    </div>  <?php }
+                    if(strpos($fullUrl, "reg=noPassMatch") == true){?>
+                        <div class="alert alert-danger">
+                            <?php echo "The two passwords do not match"; ?>
+                        </div>  <?php }
 
-                if(strpos($fullUrl, "reg=pass8") == true){?>
-                    <div class="alert alert-danger">
-                        <?php echo "Password is less than 8 characters"; ?>
-                    </div>  <?php }
+                    if(strpos($fullUrl, "reg=pass8") == true){?>
+                        <div class="alert alert-danger">
+                            <?php echo "Password is less than 8 characters"; ?>
+                        </div>  <?php }
 
-                if(strpos($fullUrl, "reg=passUpper") == true){?>
-                    <div class="alert alert-danger">
-                        <?php echo "Password must contain at least 1 upper-case letter"; ?>
-                    </div>  <?php }
+                    if(strpos($fullUrl, "reg=passUpper") == true){?>
+                        <div class="alert alert-danger">
+                            <?php echo "Password must contain at least 1 upper-case letter"; ?>
+                        </div>  <?php }
 
-                if(strpos($fullUrl, "reg=passNum") == true){?>
-                    <div class="alert alert-danger">
-                        <?php echo "Password must contain at least 1 number"; ?>
-                    </div>  <?php }
+                    if(strpos($fullUrl, "reg=passNum") == true){?>
+                        <div class="alert alert-danger">
+                            <?php echo "Password must contain at least 1 number"; ?>
+                        </div>  <?php }
 
-                if(strpos($fullUrl, "reg=userExists") == true){?>
-                    <div class="alert alert-danger">
-                        <?php echo "Username already exists"; ?>
-                    </div>  <?php }
-
-                    ?>
-
+                    if(strpos($fullUrl, "reg=userExists") == true){?>
+                        <div class="alert alert-danger">
+                            <?php echo "Username already exists"; ?>
+                        </div>  <?php }
+                ?>
 
                 <div class="form-group col-md-6">
                     <label for="inputUser">Username</label>

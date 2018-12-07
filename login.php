@@ -1,5 +1,8 @@
 <?php
     session_start();
+    if(!isset($_SESSION['username'])){
+        header('location: loginForm.php');
+    }
     include('connect.php');
     include('functions.php');
     unset($_SESSION['badUser']);
@@ -20,7 +23,7 @@
 
         if($result == 3){
             $timeZone = (new DateTimeZone('Europe/Dublin'));
-            $lockoutTime = 120; // this is 5 minutes in seconds
+            $lockoutTime = 300; // this is 5 minutes in seconds
 
             $currentTime = new DateTime('now', $timeZone);
             $currentTimeStamp = date_timestamp_get($currentTime);
@@ -32,7 +35,6 @@
             $timeDiff = abs($currentTimeStamp - $lastDBTimeStamp);
 
             if($timeDiff < $lockoutTime){
-                // output error - header
                 $timeLeft = $lockoutTime - $timeDiff;
                 $_SESSION['timeLeft'] = $timeLeft;
                 header('location: loginForm.php?log=lockedOut');
@@ -69,10 +71,9 @@
                 $hashedInput = hash('sha256', $saltInput);
                 // compare passwords
                 if(check_passwords($hashedInput, $hashedPassword)){
-                    session_destroy();  // destroying session to create authenticated session
+                    session_destroy();  // destroying session to create new authenticated session
                     session_start();
                     $_SESSION['username'] = $username;
-                    $_SESSION['success'] = "Welcome!";
                     clearAttempts($userAgent);
                 }
                 else{
@@ -90,7 +91,7 @@
             }
         }
         if(isset($_SESSION['username'])) {
-            header("location: success.php");
+            header("location: home.php");
         }
         else{
             header("Location: loginForm.php");

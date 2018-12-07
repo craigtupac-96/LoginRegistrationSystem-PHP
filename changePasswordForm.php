@@ -1,5 +1,5 @@
 <?php
-    session_start();   // needed
+    session_start();
     if(!isset($_SESSION['username'])){
         header('location: loginForm.php');
     }
@@ -7,14 +7,14 @@
     include_once("navbar.php");
     $errors = array();
     ?>
-        <div class="card">
-            <div class="card-header border-info">
-                <h2>Change Password</h2>
-            </div>
-            <div class="card-body">
-                <form method="post" action="changePassword.php">
-                    <!-- Display errors here -->
-                    <?php
+    <div class="card">
+        <div class="card-header border-info">
+            <h2>Change Password</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" action="changePassword.php">
+                <!-- Display errors here -->
+                <?php
                     $fullUrl = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
                     if(strpos($fullUrl, "change=emptyOldPass") == true){?>
@@ -55,31 +55,30 @@
                     if(strpos($fullUrl, "change=oldPassWrong") == true){?>
                         <div class="alert alert-danger">
                             <?php echo "The old password entered was incorrect"; ?>
-                        </div>  <?php } ?>
+                        </div>  <?php }
+                ?>
 
-
-                    <div class="form-group col-md-6">
-                        <label for="inputUser">Old Password</label>
-                        <input type="password" class="form-control" id="inputUser" name="oldPassword" placeholder="Enter Old Password">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPassword2">New Password</label>
-                        <input type="password" class="form-control" id="inputPassword1" name="newPassword1" placeholder="Enter New Password">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPassword2">Re-enter New Password</label>
-                        <input type="password" class="form-control" id="inputPassword2" name="newPassword2" placeholder="Re-enter New Password">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <button type="submit" name="change" class="btn btn-info">Submit</button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer border-info">
-                <a href="success.php" id="log">Cancel password change</a>
-            </div>
+                <div class="form-group col-md-6">
+                    <label for="inputUser">Old Password</label>
+                    <input type="password" class="form-control" id="inputUser" name="oldPassword" placeholder="Enter Old Password">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword2">New Password</label>
+                    <input type="password" class="form-control" id="inputPassword1" name="newPassword1" placeholder="Enter New Password">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword2">Re-enter New Password</label>
+                    <input type="password" class="form-control" id="inputPassword2" name="newPassword2" placeholder="Re-enter New Password">
+                </div>
+                <div class="form-group col-md-6">
+                    <button type="submit" name="change" class="btn btn-info">Submit</button>
+                </div>
+            </form>
         </div>
-
-    <?php
+        <div class="card-footer border-info">
+            <a href="home.php" id="log">Cancel password change</a>
+        </div>
+    </div>
+<?php
     include_once("htmlEnd.php");
-    ?>
+?>

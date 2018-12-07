@@ -1,4 +1,7 @@
 <?php
+    if(!isset($_SESSION['username'])){
+        header('location: loginForm.php');
+    }
     // login
     function check_passwords($input, $stored){
         for($i = 0; $i < strlen($input); $i++){

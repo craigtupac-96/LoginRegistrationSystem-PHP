@@ -1,5 +1,8 @@
 <?php
     session_start();
+    if(!isset($_SESSION['username'])){
+        header('location: loginForm.php');
+    }
     include('connect.php');
     include('functions.php');
 
@@ -54,15 +57,12 @@
             // get unique salt
             $salt = generateRandomSalt();
             $salted = $salt . $password1;
-
             $hash = hash('sha256', $salted);
 
             $sql = "INSERT INTO `users` (`id`, `username`, `password`, `salt`) VALUES (NULL, '".$username."', '".$hash."', '".$salt."')";
             mysqli_query($con, $sql);
-            session_destroy(); // fix this -> kill session and jump to login
-            session_start();
-            $_SESSION['username'] = $username;
-            $_SESSION['success'] = "Welcome! ";
-            header('location: success.php');
+
+            session_destroy();
+            header('location: loginForm.php?reg=success');
     }
 
